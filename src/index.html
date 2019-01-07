@@ -2,16 +2,32 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,
-     initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.51.0/mapbox-gl.css' rel='stylesheet' />
+
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="index.css">
+
     <title></title>
 </head>
 
 <body>
-    <div id='map' style='width: 400px; height: 300px;'></div>
+    <div id="map" style="height: 100vh;"></div>
+    <div id="header">
+        <div id="header-bg">
+            <h1>US Toxic Release Visualizer</h1>
+            <h2></h2>
+        </div>
+    </div>
+    <div class="search-bar">
+        <form>
+            <input type="text" placeholder="Enter a city..." required>
+        </form>
+    </div>
     <script src="app.js"></script>
+</body>
 </html>
