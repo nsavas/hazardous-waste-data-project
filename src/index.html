@@ -12,15 +12,21 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="index.css">
 
-    <title></title>
+    <title>ACM PROJECT</title>
 </head>
 
 <body>
     <div id="map" style="height: 100vh;"></div>
     <div id="header">
         <div id="header-bg">
-            <h1>US Toxic Release Visualizer</h1>
-            <h2></h2>
+            <h1>US Chemical Release Visualizer</h1>
+            <div id="header-inner-bg">
+                <h2>
+                    Welcome to the <strong>US Chemical Release Visualizer</strong><br/>
+                    Generate a visualization of this past decades chemical release data within
+                    a US City using data from the <a href="epa.gov">EPA</a>. 
+                </h2>
+            </div>
         </div>
     </div>
     <div class="search-bar">
@@ -28,6 +34,7 @@
             <input type="text" placeholder="Enter a city..." required>
         </form>
     </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
