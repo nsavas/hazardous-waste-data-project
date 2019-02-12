@@ -9,15 +9,15 @@
 
 #header {
   position: absolute;
-  top: 20vh;
+  top: 15vh;
   width: 100%;
   text-align: center;
 }
 
 #header h1 {
-  font-size: 35px;
+  font-size: 30px;
   font-weight: 600;
-  padding: 20px;
+  padding: 12px;
 }
 
 #header-bg {
@@ -28,7 +28,22 @@
   border-radius: 15px;
 }
 
-.menu {
+
+#header-inner-bg {
+  margin: 0 auto;
+  height: 75px;
+  width: 520px;
+  background-color: rgb(255, 255, 255, 0.7);
+  border-radius: 10px;
+}
+
+#header-inner-bg h2 {
+  font-size: 17px;
+  padding: 10px;
+  text-align: center;
+}
+
+.search-bar {
   position: absolute;
   top: 65vh;
   width: 100%;
