@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!--chad montoya-->
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,9 +25,34 @@
     </div>
     <div class="search-bar">
         <form>
-            <input type="text" placeholder="Enter a city..." required>
+            <div id="dropdown" class="menu">
+                <input type="text" placeholder="Enter a city..." id="myInput" 
+                onkeyup="dropdownMenu()" required>
+                <x href="#Nathan">Nathan</x>
+                <x href="#Chad">Chad</x>
+                <x href="#Alex">Alex</x>
+            </div>
         </form>
     </div>
     <script src="app.js"></script>
+
+    <script language="javascript">
+        function dropdownMenu() {
+            var input, filter, x;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("dropdown");
+            x = div.getElementsByTagName("x");
+            for (i = 0; i < x.length; i++) {
+                textValue = x[i].textContent || x[i].innerText;
+                if (textValue.toUpperCase().indexOf(filter) > -1) {
+                    x[i].style.display = "";
+                }
+                else {
+                    x[i].style.display = "none";
+                }
+            }
+        }
+    </script>
 </body>
 </html>
