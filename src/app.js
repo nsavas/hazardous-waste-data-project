@@ -8,19 +8,19 @@ var map = new mapboxgl.Map({
 
 // Fetch us cities csv data
 d3.csv("../data/uscitiesv1.4.csv").then(function(data) {
+
     console.log(data);
 });
 
 // Query parameters to be passed to API endpoint
 let params = {};
-  
+
 // This function takes in a parameter object and
 // encodes it into a URL query
 function encodeQuery(params) {
     let esc = encodeURIComponent;
     let query = Object.keys(params)
-    .map(k => esc(k) + '=' + esc(params[k]))
-    .join('&');
-
+    .map(k => esc(k) + '/' + esc(params[k]))
+    .join('/');
     return query;
 }
