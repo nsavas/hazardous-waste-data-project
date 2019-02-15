@@ -4,14 +4,14 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/light-v9',
     zoom: 4.05,
-    center: [-97.2795, 38.0282]
+    center: [-97.2795, 38.0282],
+    interactive: false
 });
 
 let geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     placeholder: "Enter a US city",
-    countries: 'us',
-    //bbox: [-124.848974, 24.396308, -66.885444, 49.384358] // US Boundary Coordinates
+    countries: 'us'
 })
 
 document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
