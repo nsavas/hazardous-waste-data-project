@@ -12,47 +12,50 @@ body {
 
 #header {
   text-align: center;
+  font-family: 'Muli', sans-serif;
   position: absolute;
-  top: 15vh;
+  top: 19vh;
   width: 100%;
 }
 
 #header-bg h1 {
   font-size: 30px;
-  font-weight: 600;
-  padding: 12px;
+  font-weight: 400;
 }
 
 #header-bg {
   display: inline-block;
   height: 400px;
   width: 550px;
-  background-color: rgba(119, 236, 236, 0);
-  border-radius: 15px;
-  border-style: outset;
-  border-width: 0.7px;
-  border-color: black;
+  background-color: rgba(255, 255, 255, 0.88);
+  border-radius: 8px;
 }
 
 #header-inner-bg {
   margin: 0 auto;
-  height: 75px;
+  height: 80px;
   width: 520px;
-  background-color: rgb(255, 255, 255, 0.7);
+  background-color: rgba(201, 67, 67, 0.342);
   border-radius: 10px;
 }
 
 #header-inner-bg h2 {
-  font-size: 17px;
+  font-size: 15px;
   padding: 10px;
   text-align: center;
+}
+
+#header-description h2 {
+  font-size: 15px;
+  padding-left: 20px;
+  text-align: left;
 }
 
 .geocoder {
   position:absolute;
   z-index:1;
   width: 520px;
-  top:345px;
+  top:340px;
 }
 
 .mapboxgl-ctrl-geocoder { min-width:100%; }
