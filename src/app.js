@@ -8,10 +8,14 @@ var map = new mapboxgl.Map({
 });
 
 let geocoder = new MapboxGeocoder({
-    accessToken: mapboxgl.accessToken
+    accessToken: mapboxgl.accessToken,
+    placeholder: "Enter a US city",
+    bbox: [-124.848974, 24.396308, -66.885444, 49.384358] // US Boundary Coordinates
 })
 
-map.addControl(geocoder);
+//map.addControl(geocoder);
+document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
 
 // Fetch us cities csv data
 /*d3.csv("../data/uscitiesv1.4.csv").then(function(data) {

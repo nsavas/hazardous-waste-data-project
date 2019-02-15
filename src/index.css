@@ -1,11 +1,14 @@
-.marker {
-    background-image: url('mapbox-icon.png');
-    background-size: cover;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-    cursor: pointer;
-  }
+body {
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position:absolute; 
+  top:0;
+  bottom:0;
+  width:100%;
+}
 
 #header {
   text-align: center;
@@ -24,13 +27,12 @@
   display: inline-block;
   height: 400px;
   width: 550px;
-  background-color: rgba(119, 236, 236, 0.5);
+  background-color: rgba(119, 236, 236, 0);
   border-radius: 15px;
   border-style: outset;
   border-width: 0.7px;
   border-color: black;
 }
-
 
 #header-inner-bg {
   margin: 0 auto;
@@ -46,37 +48,11 @@
   text-align: center;
 }
 
-.search-bar {
-  position: absolute;
-  top: 65vh;
-  width: 100%;
-  text-align: center;
+.geocoder {
+  position:absolute;
+  z-index:1;
+  width: 520px;
+  top:345px;
 }
 
-#dropdown {
-  padding-top: 153px;
-}
-
-.menu x {
-  color: black;
-  padding: 12px 16px;
-  text-decoration: none;
-  display: block;
-}
-
-#result li:hover {background-color: #ececec}
-
-.menu {
-  position: absolute;
-  background-color: #f6f6f6;
-  min-width: 230px;
-  border: 1px solid #ddd;
-  z-index: 1;
-}
-
-input {
-  font-size: 20px;
-  height: 35px;
-  width: 521px;
-  padding: 12px 15px;
-}
+.mapboxgl-ctrl-geocoder { min-width:100%; }
