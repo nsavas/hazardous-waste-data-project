@@ -8,6 +8,9 @@
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
 
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.0/mapbox-gl-geocoder.css' type='text/css' />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="index.css">
@@ -24,30 +27,39 @@
                 <h2>
                     Welcome to the <strong>US Chemical Release Visualizer</strong><br/>
                     Generate a visualization of this past decades chemical release data within
-                    a US City using data from the <a href="epa.gov">EPA</a>. 
+                    a US City using data from the <a href="http://www.epa.gov">EPA</a>. 
                 </h2>
-                <form>
-                    <input type="text" placeholder="Enter a city..." required>
-                </form>
+                <div id="dropdown">
+                    <input type="text" name="search" id="search" placeholder="Enter a city..."/>
+                </div>
+                <ul class="list-group" id="result"></ul>
+                </ul>
+                <br />
             </div>
         </div>
-<<<<<<< HEAD
-=======
     </div>
-    <div class="search-bar">
-        <form>
-            <div id="dropdown" class="menu">
-                <input type="text" placeholder="Enter a city..." id="myInput" 
-                onkeyup="dropdownMenu()" required>
-                <x href="#Nathan">Nathan</x>
-                <x href="#Chad">Chad</x>
-                <x href="#Alex">Alex</x>
-            </div>
-        </form>
-    </div>
->>>>>>> c3877087c968d468ee5072aafbe6bf5b37954a16
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="app.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#search').keyup(function() {
+                $('#result').html('');
+                let searchField = $('#search').val().toUpperCase();
+                //let expression = new RegExp(searchField, 'i');
+                $.getJSON('../data/csvjson.json', function(data) {
+                    $.each(data, function(key, value) {
+                        if (value.city.toUpperCase().startsWith(searchField) && $('ul#result li').length < 5 && searchField.length > 0) {
+                            $('#result').append('<li class="list-group-item">' + value.city + ', ' + value.state_id + '</li>')
+                        }
+
+                    })
+                })
+            })
+            $('#result').keydown(function() {
+                $('.list-group').remove();
+            });
+        })
+    </script>
 
     <script language="javascript">
         function dropdownMenu() {
@@ -55,7 +67,7 @@
             input = document.getElementById("myInput");
             filter = input.value.toUpperCase();
             div = document.getElementById("dropdown");
-            x = div.getElementsByTagName("x");
+            // x = div.getElementsByTagName("x");
             for (i = 0; i < x.length; i++) {
                 textValue = x[i].textContent || x[i].innerText;
                 if (textValue.toUpperCase().indexOf(filter) > -1) {
