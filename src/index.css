@@ -40,7 +40,7 @@ body {
 
 #header-bg {
   display: inline-block;
-  height: 400px;
+  height: 375px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
   border-radius: 8px;
@@ -70,7 +70,7 @@ body {
   position: absolute;
   z-index:1;
   width: 520px;
-  top:340px;
+  top:310px;
 }
 
 .mapboxgl-ctrl-geocoder { min-width:100%; }
