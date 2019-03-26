@@ -10,6 +10,21 @@ body {
   width:100%;
 }
 
+#git-link {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 30px;
+  width: 150px;
+  background-color: rgba(7, 7, 7, 0.5);
+  margin-right: 6.3px;
+  margin-top: 6.3px;
+  border-radius: 8px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 30px;
+}
+
 #header {
   text-align: center;
   font-family: 'Muli', sans-serif;
@@ -51,8 +66,8 @@ body {
   text-align: left;
 }
 
-.geocoder {
-  position:absolute;
+.geocoder{
+  position: absolute;
   z-index:1;
   width: 520px;
   top:307px;

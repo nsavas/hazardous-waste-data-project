@@ -11,7 +11,10 @@ var map = new mapboxgl.Map({
 let geocoder = new MapboxGeocoder({
     accessToken: mapboxgl.accessToken,
     placeholder: "Enter a US city",
-    countries: 'us'
+
+    countries: 'us',
+    limit: 10
+    //bbox: [-124.848974, 24.396308, -66.885444, 49.384358] // US Boundary Coordinates
 })
 
 /*$.getJSON('../data/us-zip-code.geojson', function(data) {
