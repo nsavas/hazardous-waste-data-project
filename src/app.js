@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // Display map
 mapboxgl.accessToken = 'pk.eyJ1IjoiY3N1bGJhY20td2FzdGVwcm9qZWN0IiwiYSI6ImNqbmI3bXIwdDAxMnMzcG8weDRzM3Z1NnkifQ.3V4lCPK2mrT54kGI22fdRQ';
 var map = new mapboxgl.Map({
@@ -85,11 +86,27 @@ function encodeQuery(params) {
     return Object.keys(params).map(key =>
         esc(key) + '/' + esc(params[key]))
         .join('/');
+=======
+import React, { Component } from 'react'
+import Map from './components/Map'
+
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {}
+  };
+
+  componentDidMount() {
+  }
+
+  render() {
+  return (
+      <div className="app">
+        <Map/>
+      </div>
+  );
+  }
+>>>>>>> 735d67624fd8cd525fd7875db0cd981da4b340e0
 }
 
-let userQuery = encodeQuery(params) + "/" + esc("JSON");
-
-fetch("https://iaspub.epa.gov/enviro/efservice/V_TRI_RELEASES_EZ/" + userQuery, {})
-    .then(response => response.json()).then(data => {
-        console.log(data);
-})*/
+export default App;
