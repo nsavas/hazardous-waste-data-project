@@ -13,7 +13,7 @@ let geocoder = new MapboxGeocoder({
     placeholder: "Enter a US city",
 
     countries: 'us',
-    limit: 10
+    limit: 6
     //bbox: [-124.848974, 24.396308, -66.885444, 49.384358] // US Boundary Coordinates
 })
 
