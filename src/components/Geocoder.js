@@ -3,11 +3,19 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.m
 import '../App.css';
 
 class Geocoder extends React.Component {
-    componentDidMount() {}
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
+        var geocoder = new MapboxGeocoder({
+            accessToken: this.props.accessToken
+        });
+    }
 
     render() {
         return (
-            <div className="geocoder"></div>
+            <div></div>
         );
     }
 }
