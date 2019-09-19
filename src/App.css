@@ -1,8 +1,26 @@
+.App {
+  text-align: center;
+}
+
+.Map {
+  position: absolute; 
+  top: 0; 
+  bottom:0;
+  width: 100%;
+  height: 100%;
+  margin: 0; 
+  padding: 0;
+}
+
+.mapboxgl-ctrl-geocoder {
+  min-width: 100%;
+}
+
 .header {
   text-align: center;
   position: absolute;
   font-family: 'Muli', sans-serif;
-  top: 20vh;
+  top: 23vh;
   width: 100%;
 }
 
@@ -18,7 +36,7 @@ body {
 
 .header-bg {
   display: inline-block;
-  height: 405px;
+  height: 395px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
   border-radius: 8px;
@@ -49,8 +67,8 @@ body {
 
 .geocoder{
   position: absolute;
-  padding-left: 80px;
+  padding-left: 5px;
   z-index: 1;
-  width: 1120px;
-  top: 340px;
-}
+  width: 510px;
+  top: 330px;
+} 
