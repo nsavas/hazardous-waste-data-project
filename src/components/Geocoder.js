@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Geocode from 'react-map-gl-geocoder'
 import '../App.css'
 
-const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
+const ACCESS_TOKEN = process.env.REACT2_APP_ACCESS_TOKEN;
 
 class Geocoder extends Component {
     containerRef = React.createRef();
