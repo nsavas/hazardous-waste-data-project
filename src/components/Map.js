@@ -10,7 +10,7 @@ class Map extends React.Component {
         super(props);
 
         this.state = {
-            showHeader: true
+            showHeader: true,
         }
     }
 
@@ -21,13 +21,13 @@ class Map extends React.Component {
           container: this.container,
           style: 'mapbox://styles/mapbox/light-v9',
           center: [-97.2795, 38.0282],
-          zoom: 4.20
+          zoom: 4.20,
         })
 
         let geocoder = new MapboxGeocoder({
             accessToken: ACCESS_TOKEN,
             countries: "US",
-            placeholder: "Enter any US city"
+            placeholder: "Enter any US city",
         });
 
         document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
@@ -40,10 +40,19 @@ class Map extends React.Component {
         });
     }
 
+    onClick() {
+        this.setState({
+            showHeader: true,
+        });
+    }
+
     render() {
         return (
             <div className="parentMap">
                 <div className="Map" ref={(x) => { this.container = x }}></div>
+                <div className="back-button">
+                    <button onClick={this.onClick.bind(this)}>Go Back</button>
+                </div>
                 {this.state.showHeader ? 
                 <div className="header">
                     <div className="header-bg">
