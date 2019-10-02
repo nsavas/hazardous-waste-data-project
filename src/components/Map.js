@@ -37,8 +37,6 @@ class Map extends React.Component {
         
         this.geocoder.on('result', result => {
             this.setState({ showHeader: false });
-            
-            this.geocoder.clear();
 
             let userCity = result.result.text;
             console.log(userCity);
@@ -46,7 +44,7 @@ class Map extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.showHeader == true) {
+        if (this.state.showHeader) {
             document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         }
     }
@@ -65,6 +63,8 @@ class Map extends React.Component {
 
         this.map.setCenter(this.state.center);
         this.map.setZoom(this.state.zoom);
+
+        this.geocoder.clear();
     }
 
     render() {
