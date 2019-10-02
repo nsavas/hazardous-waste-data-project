@@ -17,27 +17,34 @@ class Map extends React.Component {
     componentDidMount() {
         MapboxGl.accessToken = ACCESS_TOKEN;
 
-        let map = new MapboxGl.Map({
+        this.map = new MapboxGl.Map({
           container: this.container,
           style: 'mapbox://styles/mapbox/light-v9',
           center: [-97.2795, 38.0282],
           zoom: 4.20,
         })
 
-        let geocoder = new MapboxGeocoder({
+        this.geocoder = new MapboxGeocoder({
             accessToken: ACCESS_TOKEN,
             countries: "US",
             placeholder: "Enter any US city",
+            limit: 4,
         });
 
-        document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+        document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         
-        geocoder.on('result', result => {
+        this.geocoder.on('result', result => {
             this.setState({ showHeader: false });
 
             let userCity = result.result.text;
             console.log(userCity);
         });
+    }
+
+    componentDidUpdate() {
+        if (this.state.showHeader === true) {
+            document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
+        }
     }
 
     onClick() {
@@ -50,9 +57,6 @@ class Map extends React.Component {
         return (
             <div className="parentMap">
                 <div className="Map" ref={(x) => { this.container = x }}></div>
-                <div className="back-button">
-                    <button onClick={this.onClick.bind(this)}>Go Back</button>
-                </div>
                 {this.state.showHeader ? 
                 <div className="header">
                     <div className="header-bg">
@@ -76,7 +80,10 @@ class Map extends React.Component {
                             </h2>
                         </div>
                     </div>
-                </div> : null}
+                </div> : 
+                    <div className="back-button">
+                        <button onClick={this.onClick.bind(this)}>Go Back</button>
+                    </div>}
             </div>
         );
     }
