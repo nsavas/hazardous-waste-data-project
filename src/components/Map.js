@@ -11,8 +11,10 @@ class Map extends React.Component {
 
         this.state = {
             showHeader: true,
+            center: [-97.2795, 38.0282],
+            zoom: 4.20
         }
-    }
+    };
 
     componentDidMount() {
         MapboxGl.accessToken = ACCESS_TOKEN;
@@ -20,21 +22,23 @@ class Map extends React.Component {
         this.map = new MapboxGl.Map({
           container: this.container,
           style: 'mapbox://styles/mapbox/light-v9',
-          center: [-97.2795, 38.0282],
-          zoom: 4.20,
+          center: this.state.center,
+          zoom: this.state.zoom
         })
 
         this.geocoder = new MapboxGeocoder({
             accessToken: ACCESS_TOKEN,
             countries: "US",
             placeholder: "Enter any US city",
-            limit: 4,
+            limit: 4
         });
 
         document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         
         this.geocoder.on('result', result => {
             this.setState({ showHeader: false });
+            
+            this.geocoder.clear();
 
             let userCity = result.result.text;
             console.log(userCity);
@@ -42,7 +46,7 @@ class Map extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.showHeader === true) {
+        if (this.state.showHeader == true) {
             document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         }
     }
@@ -50,7 +54,17 @@ class Map extends React.Component {
     onClick() {
         this.setState({
             showHeader: true,
+            center: [-97.2795, 38.0282],
+            zoom: 4.20
         });
+
+        this.map.flyTo({
+            center: this.state.center,
+            zoom: this.state.zoom
+        })
+
+        this.map.setCenter(this.state.center);
+        this.map.setZoom(this.state.zoom);
     }
 
     render() {
@@ -80,10 +94,11 @@ class Map extends React.Component {
                             </h2>
                         </div>
                     </div>
-                </div> : 
-                    <div className="back-button">
-                        <button onClick={this.onClick.bind(this)}>Go Back</button>
-                    </div>}
+                </div> 
+                :
+                <div className="back-button">
+                    <button onClick={this.onClick.bind(this)}>Go Back</button>
+                </div>}
             </div>
         );
     }
