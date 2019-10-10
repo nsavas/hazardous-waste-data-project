@@ -77,7 +77,7 @@ class Map extends React.Component {
                         <h1>US Chemical Release Visualizer</h1>
                         <div className="header-inner-bg">
                         <h2>
-                            <strong>Note:</strong> This data is queried from the <a href="https://www.epa.gov/toxics-release-inventory-tri-program">EPA Toxic Release Inventory (TRI)</a>.
+                            <strong>Note:</strong> This data is queried from the <a href="https://www.epa.gov/toxics-release-inventory-tri-program/tri-basic-data-files-calendar-years-1987-2017">EPA Toxic Release Inventory (TRI)</a>.
                             TRI tracks the management of certain toxic chemicals that may pose a threat to human health and the environment.
                             More information may be found on the website.
                         </h2>
