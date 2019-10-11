@@ -44,7 +44,6 @@ app.post('/postgre-api/get-tri-releases-by-city', function(request, response) {
     let cityName = request.body.city;
     let cityState = request.body.state;
     let query = "SELECT * FROM full_epa_tri_releases WHERE city = '" + cityName + "' AND state = '" + cityState + "'";
-
     pool.connect((err, db, done) => { 
         if (err) return response.status(400).send(err);
         else {

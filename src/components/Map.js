@@ -40,18 +40,24 @@ class Map extends React.Component {
         
         // Listens to the geocoder result event
         this.geocoder.on('result', result => {
+            console.log(result);
             let state;
-            let city = result.result.text; // Get city name
+            let city;
+            // Get city name
+            if (result.result.matching_text) city = result.result.matching_text.toUpperCase();
+            else city = result.result.text.toUpperCase();
+            // Get the two letter state code
             let locationContext = result.result.context;
             locationContext.map(context => {
                 if (context.id.split('.')[0] == 'region') {
-                    state = context.short_code.split('-')[1]; // Get the two letter state code
+                    state = context.short_code.split('-')[1];
                 }
             })
-
-            // JSON object that will be sent to api endpoint
+            console.log(state);
+            console.log(city);
+            // JSON object that sends to api
             let data = JSON.stringify({
-                city: city.toUpperCase(),
+                city: city,
                 state: state
             });
 
@@ -86,15 +92,12 @@ class Map extends React.Component {
             center: [-97.2795, 38.0282],
             zoom: 4.20
         });
-
         this.map.flyTo({
             center: this.state.center,
             zoom: this.state.zoom
         })
-
         this.map.setCenter(this.state.center);
         this.map.setZoom(this.state.zoom);
-
         this.geocoder.clear();
     }
 
