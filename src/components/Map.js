@@ -37,9 +37,21 @@ class Map extends React.Component {
         
         this.geocoder.on('result', result => {
             this.setState({ showHeader: false });
-
             let userCity = result.result.text;
-            console.log(userCity);
+            let data = {
+                city: "LONG BEACH",
+                state: "CA"
+            };
+            let request = new Request('http://localhost:3000/postgre-api/get-tri-releases-by-city', {
+                method: 'POST',
+                headers: new Headers({ 'Content-Type': 'application/json' }),
+                body: JSON.stringify(data)
+            });
+
+            fetch(request).then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
         });
     }
 
