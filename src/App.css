@@ -36,7 +36,7 @@ body {
 
 .header-bg {
   display: inline-block;
-  height: 395px;
+  height: 365px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
   border-radius: 8px;
@@ -70,7 +70,7 @@ body {
   padding-left: 5px;
   z-index: 1;
   width: 510px;
-  top: 330px;
+  top: 305px;
 } 
 
 .back-button {

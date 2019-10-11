@@ -19,6 +19,7 @@ class Map extends React.Component {
     componentDidMount() {
         MapboxGl.accessToken = ACCESS_TOKEN;
 
+        // Instantiate a map interface once component is mounted
         this.map = new MapboxGl.Map({
           container: this.container,
           style: 'mapbox://styles/mapbox/light-v9',
@@ -26,6 +27,7 @@ class Map extends React.Component {
           zoom: this.state.zoom
         })
 
+        // Instantiate geocoder
         this.geocoder = new MapboxGeocoder({
             accessToken: ACCESS_TOKEN,
             countries: "US",
@@ -33,32 +35,42 @@ class Map extends React.Component {
             limit: 4
         });
 
+        // Append geocoder to a div 
         document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         
+        // Listens to the geocoder result event
         this.geocoder.on('result', result => {
-            this.setState({ showHeader: false });
+            let state;
+            let city = result.result.text; // Get city name
+            let locationContext = result.result.context;
+            locationContext.map(context => {
+                if (context.id.split('.')[0] == 'region') {
+                    state = context.short_code.split('-')[1]; // Get the two letter state code
+                }
+            })
 
-            let userCity = result.result;
-            console.log(userCity);
+            // JSON object that will be sent to api endpoint
+            let data = JSON.stringify({
+                city: city.toUpperCase(),
+                state: state
+            });
 
-            let data = {
-                city: "LONG BEACH",
-                state: "CA"
-            };
-
+            // Request to retrieve the chemical release data corresponding to the given city and state
             let request = new Request('http://localhost:3000/postgre-api/get-tri-releases-by-city', {
                 method: 'POST',
                 headers: new Headers({ 'Content-Type': 'application/json' }),
-                body: JSON.stringify(data)
+                body: data
             });
 
-            fetch(request).then(response => response.json())
-            .catch(function(err) {
-                console.log(err);
-            })
+            // Fetch request and handle result
+            fetch(request)
+            .then(response => response.json())
             .then(data => {
                 console.log(data);
-            })
+            }).catch(err => console.log(err))
+
+            // Toggle off the input header
+            this.setState({ showHeader: false });
         });
     }
 
@@ -105,10 +117,10 @@ class Map extends React.Component {
                         <div className="header-description">
                             <h2>
                             Welcome to the <strong>US Chemical Release Visualizer</strong>, a tool for
-                            visualizing a decades worth of chemical release data within a given US city.
+                            visualizing 30 years worth (1987-2017) of chemical release data within any US city.
                             <br /><br />
-                            To get started, enter the name of a US city and press enter. This will
-                            query chemical release data for the given city and generate an interactive visualization.
+                            To get started, enter a US city. This will
+                            grab the data for the given city and generate an interactive visualization.
                             This data includes chemical name, amount of release, date of release, and much more!
                             </h2>
                         </div>
