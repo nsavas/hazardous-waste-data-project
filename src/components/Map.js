@@ -30,6 +30,7 @@ class Map extends React.Component {
         this.geocoder = new MapboxGeocoder({
             accessToken: ACCESS_TOKEN,
             countries: "US",
+            types: "place",
             placeholder: "Enter any US city",
             limit: 4
         });
