@@ -8,7 +8,6 @@ const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
 class Map extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             showHeader: true,
             center: [-97.2795, 38.0282],
@@ -80,12 +79,12 @@ class Map extends React.Component {
         });
     }
 
+    // Places geocoder back onto the map once the user clicks the back button
     componentDidUpdate() {
-        if (this.state.showHeader) {
-            document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
-        }
+        if (this.state.showHeader) document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
     }
 
+    // Reconfigures the map view settings
     onClick() {
         this.setState({
             showHeader: true,
