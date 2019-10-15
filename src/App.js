@@ -4,6 +4,7 @@ import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.m
 import './App.css';
 
 const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
+MapboxGl.accessToken = ACCESS_TOKEN;
 
 class App extends React.Component {
     constructor(props) {
@@ -16,9 +17,7 @@ class App extends React.Component {
     };
 
     componentDidMount() {
-        MapboxGl.accessToken = ACCESS_TOKEN;
-
-        // Instantiate a map interface once component is mounted
+        // Instantiate a map
         this.map = new MapboxGl.Map({
             container: this.container,
             style: 'mapbox://styles/mapbox/light-v9',
@@ -35,23 +34,22 @@ class App extends React.Component {
             limit: 4
         });
 
-        // Append geocoder to a div 
+        // Add geocoder to map
         document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
         
-        // Listens to the geocoder result event
+        // Geocoder result listener
         this.geocoder.on('result', result => {
-            console.log(result);
             this.geocoder.clear(); // Clear input
+            let eventData = result.result;
 
-            let state;
-            let city;
+            let city, state;
 
             // Get city name
-            if (result.result.matching_text) city = result.result.matching_text.toUpperCase();
-            else city = result.result.text.toUpperCase();
+            if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
+            else city = eventData.text.toUpperCase();
 
             // Get the two letter state code
-            let locationContext = result.result.context;
+            let locationContext = eventData.context;
             locationContext.map(context => {
                 if (context.id.split('.')[0] == 'region') {
                     state = context.short_code.split('-')[1];
