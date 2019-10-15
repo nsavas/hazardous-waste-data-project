@@ -10,10 +10,20 @@
   height: 100%;
   margin: 0; 
   padding: 0;
+  z-index: 0;
 }
 
 .mapboxgl-ctrl-geocoder {
   min-width: 100%;
+}
+
+.github-ribbon {
+  position: absolute;
+  display: inline;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 2;
 }
 
 .header {
@@ -30,24 +40,24 @@ body {
 }
 
 .header-bg h1 {
-  font-size: 30px;
+  font-size: 28px;
   font-weight: 400;
 }
 
 .header-bg {
   display: inline-block;
-  height: 395px;
+  height: 360px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .header-inner-bg {
   margin: 0 auto;
-  height: 94px;
+  height: 90px;
   width: 520px;
   background-color: rgba(201, 67, 67, 0.342);
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .header-inner-bg h2 {
@@ -70,7 +80,7 @@ body {
   padding-left: 5px;
   z-index: 1;
   width: 510px;
-  top: 330px;
+  top: 300px;
 } 
 
 .back-button {
