@@ -1,11 +1,11 @@
 import React from 'react';
 import MapboxGl from 'mapbox-gl/dist/mapbox-gl.js';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js';
-import '../App.css';
+import './App.css';
 
 const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
 
-class Map extends React.Component {
+class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,10 +20,10 @@ class Map extends React.Component {
 
         // Instantiate a map interface once component is mounted
         this.map = new MapboxGl.Map({
-          container: this.container,
-          style: 'mapbox://styles/mapbox/light-v9',
-          center: this.state.center,
-          zoom: this.state.zoom
+            container: this.container,
+            style: 'mapbox://styles/mapbox/light-v9',
+            center: this.state.center,
+            zoom: this.state.zoom
         })
 
         // Instantiate geocoder
@@ -143,6 +143,7 @@ class Map extends React.Component {
             </div>
         );
     }
+
 }
 
-export default Map;
+export default App;
