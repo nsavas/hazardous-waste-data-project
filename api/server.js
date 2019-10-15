@@ -44,7 +44,23 @@ app.post('/postgre-api/get-tri-releases-by-city', function(request, response) {
     let cityName = request.body.city;
     let cityState = request.body.state;
 
-    let query = "SELECT * FROM full_epa_tri_releases WHERE city = '" + cityName + "' AND state = '" + cityState + "'";
+    let query = "SELECT row_to_json(fc) as result_geometry, row_to_json(td) as result_data FROM ("
+                +  "SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features FROM ("
+                +  "SELECT 'Feature' As type, ST_AsGeoJSON(facilitygeometry)::json As geometry FROM "
+                +  "full_epa_tri_releases WHERE city = '" + cityName + "' AND state = '" + cityState + "') As f),"
+                +  " array_to_json(array_agg(d)) As fc";
+
+
+    let query2 = "SELECT year, facilityname, streetaddress, city, county, state, zipcode, latitude, longitude,"
+                +  "federalfacility, industrysector, chemical, cleanairactchemical, metal, carcinogen, unitofmeasure,"
+                +  "fugitiveair_51, stackair_52, water_53, underground_54, underground_class_i_541, underground_class_ii_v_542,"
+                +  "landfills_551, rcra_c_landfills_551a, otherlandfills_551b, landtreatment_552, surfaceimpoundment_553,"
+                +  "rcra_surfaceimpoundment_553a, othersurfaceimpoundment_553b, otherdisposal_554, onsitereleasetotal,"
+                +  "potw_transfersforrelease_61, potw_transfersfortreatment_61, potw_totaltransfers,"
+                +  "offsitereleasetotal, offsiterecycledtotal, offsiteenergyrecoverytotal, offsitetreatedtotal,"
+                +  "totaltransfer, totalreleases, releases_81, energyrecoveryonsite_82, recyclingonsite_84, treatmentonsite_86,"
+                +  "productionwaste_81_to_87, parentcompanyname FROM full_epa_tri_releases "
+                +  "WHERE city = '" + cityName + "' AND state = '" + cityState + "'";
     
     pool.connect((err, db, done) => {
         if (err) return response.status(400).send(err);
@@ -54,7 +70,7 @@ app.post('/postgre-api/get-tri-releases-by-city', function(request, response) {
                 if (err) return response.status(400).send(err);
                 else {
                     console.log("Query successful.");
-                    response.status(201).send({ result: table.rows });
+                    response.status(201).send({ result: table });
                 }
             });
         }

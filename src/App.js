@@ -55,9 +55,6 @@ class App extends React.Component {
         let city, state;
         let eventData = result.result;
 
-        // Clear input
-        this.geocoder.clear();
-
         // Parse city name
         if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
         else city = eventData.text.toUpperCase();
@@ -115,6 +112,9 @@ class App extends React.Component {
         // Reconfigure map properties
         this.map.setCenter(this.state.center);
         this.map.setZoom(this.state.zoom);
+
+        // Clear input
+        this.geocoder.clear();
     }
 
     render() {
@@ -122,7 +122,7 @@ class App extends React.Component {
             <div className="App">
                 <div className="Map" ref={(x) => { this.container = x }}>
                     <a href="https://github.com/nsavas/us-city-tri-visualizer" target="_blank" className="github-ribbon">
-                        <img src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></img>
+                        <img src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" className="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></img>
                     </a>
                 </div>
                 {this.state.showHeader ? 
