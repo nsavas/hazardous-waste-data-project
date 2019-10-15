@@ -22,7 +22,8 @@ class App extends React.Component {
             container: this.container,
             style: 'mapbox://styles/mapbox/light-v9',
             center: this.state.center,
-            zoom: this.state.zoom
+            zoom: this.state.zoom,
+            interactive: false
         })
 
         // Instantiate geocoder
@@ -34,61 +35,71 @@ class App extends React.Component {
             limit: 4
         });
 
-        // Add geocoder to map
-        document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
-        
         // Geocoder result listener
         this.geocoder.on('result', result => {
-            this.geocoder.clear(); // Clear input
-            let eventData = result.result;
-
-            let city, state;
-
-            // Get city name
-            if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
-            else city = eventData.text.toUpperCase();
-
-            // Get the two letter state code
-            let locationContext = eventData.context;
-            locationContext.map(context => {
-                if (context.id.split('.')[0] == 'region') {
-                    state = context.short_code.split('-')[1];
-                }
-            })
-
-            // JSON object that sends to api
-            let data = JSON.stringify({
-                city: city,
-                state: state
-            });
-
-            // Query request with city/state user input
-            let request = new Request('http://localhost:3000/postgre-api/get-tri-releases-by-city', {
-                method: 'POST',
-                headers: new Headers({ 'Content-Type': 'application/json' }),
-                body: data
-            });
-
-            // Fetch request and handle result
-            fetch(request)
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                })
-                .catch(err => console.log(err))
-
-            // Toggle off the input header
-            this.setState({ showHeader: false });
+            this.handleGeocoderResult(result);
         });
+
+        // Add geocoder to map
+        document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
     }
 
-    // Place geocoder back onto the input header
     componentDidUpdate() {
-        if (this.state.showHeader) document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
+        if (this.state.showHeader) {
+            // Place geocoder back onto the input header
+            document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
+        }
+    }
+
+    handleGeocoderResult(result) {
+        let city, state;
+        let eventData = result.result;
+
+        // Clear input
+        this.geocoder.clear();
+
+        // Parse city name
+        if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
+        else city = eventData.text.toUpperCase();
+
+        // Parse two letter state code
+        let locationContext = eventData.context;
+        locationContext.map(context => {
+            if (context.id.split('.')[0] == 'region') {
+                state = context.short_code.split('-')[1];
+            }
+        })
+
+        // JSON object that sends to api
+        let data = JSON.stringify({
+            city: city,
+            state: state
+        });
+
+        // Query request with city/state user input
+        let request = new Request('http://localhost:3000/postgre-api/get-tri-releases-by-city', {
+            method: 'POST',
+            headers: new Headers({ 'Content-Type': 'application/json' }),
+            body: data
+        });
+
+        // Fetch request and handle result
+        fetch(request)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+        // Toggle off the input header
+        this.setState({ showHeader: false });
     }
 
     // Executes each time user returns to input header
     onClick() {
+        // Reset state
         this.setState({
             showHeader: true,
             center: [-97.2795, 38.0282],
@@ -108,8 +119,12 @@ class App extends React.Component {
 
     render() {
         return (
-            <div className="parentMap">
-                <div className="Map" ref={(x) => { this.container = x }}></div>
+            <div className="App">
+                <div className="Map" ref={(x) => { this.container = x }}>
+                    <a href="https://github.com/nsavas/us-city-tri-visualizer" target="_blank" className="github-ribbon">
+                        <img src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" data-recalc-dims="1"></img>
+                    </a>
+                </div>
                 {this.state.showHeader ? 
                 <div className="header">
                     <div className="header-bg">
@@ -128,7 +143,7 @@ class App extends React.Component {
                             visualizing 30 years worth (1987-2017) of chemical release data within any US city.
                             <br /><br />
                             To get started, enter a US city. This will
-                            grab the data for the given city and generate an interactive visualization.
+                            grab the data for the given city and begin the visualization.
                             This data includes chemical name, amount of release, date of release, and much more!
                             </h2>
                         </div>

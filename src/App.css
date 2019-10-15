@@ -10,10 +10,20 @@
   height: 100%;
   margin: 0; 
   padding: 0;
+  z-index: 0;
 }
 
 .mapboxgl-ctrl-geocoder {
   min-width: 100%;
+}
+
+.github-ribbon {
+  position: absolute;
+  display: inline;
+  top: 0;
+  right: 0;
+  border: 0;
+  z-index: 2;
 }
 
 .header {
@@ -39,15 +49,15 @@ body {
   height: 365px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .header-inner-bg {
   margin: 0 auto;
-  height: 94px;
+  height: 90px;
   width: 520px;
   background-color: rgba(201, 67, 67, 0.342);
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .header-inner-bg h2 {
