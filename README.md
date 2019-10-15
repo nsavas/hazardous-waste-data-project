@@ -25,10 +25,10 @@ npm start
 ## Built With
 
 * [React](https://reactjs.org/docs/getting-started.html)
-* [Express](https://github.com/mpj/oauth-bridge-template)
-* [PostgreSQL](https://www.heroku.com/home)
-* [Mapbox GL JS](https://d3js.org/)
-* [React-Vis](https://developer.spotify.com/documentation/)
+* [Express](https://expressjs.com)
+* [PostgreSQL](https://www.postgresql.org)
+* [Mapbox GL JS](https://docs.mapbox.com/mapbox-gl-js/api/)
+* [React-Vis](https://uber.github.io/react-vis/)
 
 ## Authors
 
