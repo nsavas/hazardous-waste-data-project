@@ -41,11 +41,15 @@ class Map extends React.Component {
         // Listens to the geocoder result event
         this.geocoder.on('result', result => {
             console.log(result);
+            this.geocoder.clear(); // Clear input
+
             let state;
             let city;
+
             // Get city name
             if (result.result.matching_text) city = result.result.matching_text.toUpperCase();
             else city = result.result.text.toUpperCase();
+
             // Get the two letter state code
             let locationContext = result.result.context;
             locationContext.map(context => {
@@ -53,15 +57,14 @@ class Map extends React.Component {
                     state = context.short_code.split('-')[1];
                 }
             })
-            console.log(state);
-            console.log(city);
+
             // JSON object that sends to api
             let data = JSON.stringify({
                 city: city,
                 state: state
             });
 
-            // Request to retrieve the chemical release data corresponding to the given city and state
+            // Query request with city/state user input
             let request = new Request('http://localhost:3000/postgre-api/get-tri-releases-by-city', {
                 method: 'POST',
                 headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -70,35 +73,39 @@ class Map extends React.Component {
 
             // Fetch request and handle result
             fetch(request)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-            }).catch(err => console.log(err))
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => console.log(err))
 
             // Toggle off the input header
             this.setState({ showHeader: false });
         });
     }
 
-    // Places geocoder back onto the map once the user clicks the back button
+    // Place geocoder back onto the input header
     componentDidUpdate() {
         if (this.state.showHeader) document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
     }
 
-    // Reconfigures the map view settings
+    // Executes each time user returns to input header
     onClick() {
         this.setState({
             showHeader: true,
             center: [-97.2795, 38.0282],
             zoom: 4.20
         });
+
+        // Change view back to original
         this.map.flyTo({
             center: this.state.center,
             zoom: this.state.zoom
         })
+
+        // Reconfigure map properties
         this.map.setCenter(this.state.center);
         this.map.setZoom(this.state.zoom);
-        this.geocoder.clear();
     }
 
     render() {
