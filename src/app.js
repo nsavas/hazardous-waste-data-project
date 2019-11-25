@@ -7,14 +7,16 @@ const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
 MapboxGl.accessToken = ACCESS_TOKEN;
 
 class App extends React.Component {
+    initialState = {
+        showHeader: true,
+        center: [-97.2795, 38.0282],
+        zoom: 4.20
+    }
+
     constructor(props) {
         super(props);
-        this.state = {
-            showHeader: true,
-            center: [-97.2795, 38.0282],
-            zoom: 4.20
-        }
-    };
+        this.state = this.initialState;
+    }
 
     componentDidMount() {
         // Instantiate a map
@@ -31,7 +33,7 @@ class App extends React.Component {
             countries: "US",
             types: "place",
             placeholder: "Enter any US city",
-            limit: 4
+            limit: 4,
         });
 
         // Geocoder result listener
@@ -43,7 +45,7 @@ class App extends React.Component {
         document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps, prevState, snapshot) {
         if (this.state.showHeader) {
             // Place geocoder back onto the input header
             document.getElementById('geocoder').appendChild(this.geocoder.onAdd(this.map));
@@ -53,6 +55,7 @@ class App extends React.Component {
     handleGeocoderResult(result) {
         let city, state;
         let eventData = result.result;
+        console.log(eventData);
 
         // Parse city name
         if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
@@ -61,7 +64,7 @@ class App extends React.Component {
         // Parse two letter state code
         let locationContext = eventData.context;
         locationContext.map(context => {
-            if (context.id.split('.')[0] == 'region') {
+            if (context.id.split('.')[0] === 'region') {
                 state = context.short_code.split('-')[1];
             }
         })
@@ -163,14 +166,9 @@ class App extends React.Component {
         this.setState({ showHeader: false });
     }
 
-    // Executes each time user returns to input header
-    onClick() {
+    handleBackClick = () => {
         // Reset state
-        this.setState({
-            showHeader: true,
-            center: [-97.2795, 38.0282],
-            zoom: 4.20
-        });
+        this.setState(this.initialState)
 
         // Change view back to original
         this.map.flyTo({
@@ -184,6 +182,7 @@ class App extends React.Component {
 
         // Clear input
         this.geocoder.clear();
+    
     }
 
     render() {
@@ -220,7 +219,7 @@ class App extends React.Component {
                 </div> 
                 :
                 <div className="back-button">
-                    <button onClick={this.onClick.bind(this)}>Go Back</button>
+                    <button onClick={this.handleBackClick}>Go Back</button>
                 </div>}
             </div>
         );
