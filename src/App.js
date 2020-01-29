@@ -1,6 +1,9 @@
 import React from "react";
 import MapboxGl from "mapbox-gl/dist/mapbox-gl.js";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js";
+
+import ReleaseMethodBarChart from "./components/ReleaseMethodBarChart";
+
 import "./App.css";
 
 const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
@@ -12,7 +15,8 @@ class App extends React.Component {
     this.state = {
       showHeader: true,
       center: [-97.2795, 38.0282],
-      zoom: 4.2
+      zoom: 4.2,
+      data: {}
     };
   }
 
@@ -108,26 +112,42 @@ class App extends React.Component {
       }
     );
 
-    // Fetch request and handle result
-    fetch(request)
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        this.map.addSource("facilities", {
-          type: "geojson",
-          data: data.result_geometry
-        });
+    let request2 = new Request("http://localhost:3000/postgre-api/get-release-method-totals-by-city", {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      body: data
+    });
 
-        this.map.addLayer({
-          id: "facilities-point",
-          type: "symbol",
-          source: "facilities",
-          layout: {
-            'icon-image': 'danger',
-            'icon-allow-overlap': true
-          }
-        });
-      })
+    // Fetch request and handle result
+    fetch(request).then(response => response.json()).then(data => {
+      console.log(data);
+      this.map.addSource("facilities", {
+        type: "geojson",
+        data: data.result_geometry
+      });
+
+      this.map.addLayer({
+        id: "facilities-point",
+        type: "symbol",
+        source: "facilities",
+        layout: {
+          'icon-image': 'danger',
+          'icon-allow-overlap': true
+        }
+      });
+    })
+      .catch(err => {
+        console.log(err);
+      });
+
+    fetch(request2).then(response => response.json()).then(data => {
+      console.log(data);
+      this.setState({
+        data: {
+          releaseMethodTotals: data
+        }
+      });
+    })
       .catch(err => {
         console.log(err);
       });
@@ -160,7 +180,6 @@ class App extends React.Component {
 
     // Clear map layers and data source
     this.map.removeLayer("facilities-point");
-    this.map.removeLayer("facilities-heatmap");
     this.map.removeSource("facilities");
   }
 
@@ -218,8 +237,9 @@ class App extends React.Component {
             </div>
           </div>
         ) : (
-            <div className="back-button">
+            <div className="result-view">
               <button onClick={this.onClick.bind(this)}>Go Back</button>
+              {this.state.data.releaseMethodTotals ? <ReleaseMethodBarChart data={this.state.data.releaseMethodTotals} /> : null}
             </div>
           )}
       </div>

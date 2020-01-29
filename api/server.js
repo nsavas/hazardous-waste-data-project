@@ -78,6 +78,31 @@ app.post('/postgre-api/get-tri-releases-by-city', function (request, response) {
         .catch(err => {
             return response.status(400).send(err);
         })
-})
+});
+
+app.post('/postgre-api/get-release-method-totals-by-city', function (request, response) {
+    let cityName = request.body.city;
+    let cityState = request.body.state;
+
+    let query = "SELECT SUM(fugitiveair_51) AS fugitiveair, SUM(stackair_52) AS stackair, SUM(water_53) AS water,"
+        + "SUM(COALESCE(underground_54, 0) + COALESCE(underground_class_i_541, 0) + COALESCE(underground_class_ii_v_542, 0)) AS underground,"
+        + "SUM(COALESCE(landfills_551, 0) + COALESCE(rcra_c_landfills_551a, 0) + COALESCE(otherlandfills_551b, 0)) AS landfill,"
+        + "SUM(landtreatment_552) AS landtreatment,"
+        + "SUM(COALESCE(surfaceimpoundment_553, 0) + COALESCE(rcra_surfaceimpoundment_553a, 0) + COALESCE(othersurfaceimpoundment_553b, 0)) AS surfaceimpoundment,"
+        + "SUM(otherdisposal_554) AS otherdisposal FROM full_epa_tri_releases WHERE unitofmeasure = 'Pounds' AND city = '" + cityName + "' AND state = '" + cityState + "';"
+
+    db.connect().then(obj => {
+        obj.query(query).then(([result]) => {
+            console.log("Query successful.");
+            obj.done();
+            response.status(201).send({
+                result: result
+            });
+        })
+    })
+        .catch(err => {
+            return response.status(400).send(err);
+        })
+});
 
 app.listen(PORT, () => console.log('Listening on port ' + PORT));
