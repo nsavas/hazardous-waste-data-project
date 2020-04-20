@@ -2,34 +2,35 @@ import React from "react";
 import MapboxGl from "mapbox-gl/dist/mapbox-gl.js";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js";
 
-import ReleaseMethodBarChart from "./components/ReleaseMethodBarChart";
+import Result from "./components/Result";
 
 import "./App.css";
 
 const ACCESS_TOKEN = process.env.REACT_APP_ACCESS_TOKEN;
 MapboxGl.accessToken = ACCESS_TOKEN;
 
+const initialMapCenter = [-97.2795, 38.0282];
+const initialMapZoom = 4.2;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showHeader: true,
-      center: [-97.2795, 38.0282],
-      zoom: 4.2,
+      center: initialMapCenter,
+      zoom: initialMapZoom,
       data: {}
     };
   }
 
   componentDidMount() {
-    // Instantiate a map
+    // Instantiate Mapbox Map & Geocoder
     this.map = new MapboxGl.Map({
       container: this.container,
       style: "mapbox://styles/mapbox/light-v9",
       center: this.state.center,
       zoom: this.state.zoom
     });
-
-    // Instantiate geocoder
     this.geocoder = new MapboxGeocoder({
       accessToken: ACCESS_TOKEN,
       countries: "US",
@@ -37,27 +38,18 @@ class App extends React.Component {
       placeholder: "Enter any US city",
       limit: 4
     });
-
+    // Load images
     this.map.on("load", () => {
       this.map.loadImage('https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Maki-danger-15.svg/15px-Maki-danger-15.svg.png', (error, image) => {
         if (error) throw error;
         this.map.addImage('danger', image);
       });
     })
-
-    // Geocoder result listener
+    // Set Geocoder result listener 
     this.geocoder.on("result", result => {
-      let pushLeftCenter = [result.result.center[0], result.result.center[1] - 1];
-      this.geocoder.setFlyTo({
-        center: pushLeftCenter,
-        zoom: 4,
-        speed: 0.5
-      });
-
       this.handleGeocoderResult(result);
     });
-
-    // Add geocoder to map
+    // Append Geocoder
     document
       .getElementById("geocoder")
       .appendChild(this.geocoder.onAdd(this.map));
@@ -65,7 +57,6 @@ class App extends React.Component {
 
   componentDidUpdate() {
     if (this.state.showHeader) {
-      // Place geocoder back onto the input header
       document
         .getElementById("geocoder")
         .appendChild(this.geocoder.onAdd(this.map));
@@ -73,114 +64,102 @@ class App extends React.Component {
   }
 
   handleGeocoderResult(result) {
-    console.log(result);
-    let pushLeftCenter = [result.result.center[0] + 0.5, result.result.center[1]];
+    // Clear previous data layer and geocoder config, reset position
+    if (!(this.map.getSource('facilities') === undefined)) {
+      this.map.removeLayer("facilities-point");
+      this.map.removeSource("facilities");
+      this.geocoder.clear();
+    }
+    this.setState({
+      center: [result.result.center[0] + 1, result.result.center[1]],
+      zoom: 4
+    });
+    this.geocoder.setFlyTo({
+      center: [result.result.center[0] + 1, result.result.center[1]],
+      zoom: 4,
+      speed: 0.7
+    });
     this.map.flyTo({
-      center: pushLeftCenter,
+      center: [result.result.center[0], result.result.center[1]],
       zoom: 10,
       speed: 0.7
     });
-
+    // Parse location and update state
     let city, state;
     let eventData = result.result;
-
-    // Parse city name
+    let locationContext = eventData.context;
     if (eventData.matching_text) city = eventData.matching_text.toUpperCase();
     else city = eventData.text.toUpperCase();
-
-    // Parse two letter state code
-    let locationContext = eventData.context;
     locationContext.map(context => {
       if (context.id.split(".")[0] == "region") {
         state = context.short_code.split("-")[1];
       }
     });
-
-    // JSON object that sends to api
-    let data = JSON.stringify({
-      city: city,
-      state: state
+    this.setState({ city: city, state: state });
+    // Create request objects and fetch results
+    let data = JSON.stringify({ city: city, state: state });
+    let request = new Request("http://localhost:3000/postgre-api/get-tri-releases-by-city", {
+      method: "POST",
+      headers: new Headers({ "Content-Type": "application/json" }),
+      body: data
     });
-
-    // Query request with city/state user input
-    let request = new Request(
-      "http://localhost:3000/postgre-api/get-tri-releases-by-city",
-      {
-        method: "POST",
-        headers: new Headers({ "Content-Type": "application/json" }),
-        body: data
-      }
-    );
-
     let request2 = new Request("http://localhost:3000/postgre-api/get-release-method-totals-by-city", {
       method: "POST",
       headers: new Headers({ "Content-Type": "application/json" }),
       body: data
     });
-
-    // Fetch request and handle result
-    fetch(request).then(response => response.json()).then(data => {
-      console.log(data);
-      this.map.addSource("facilities", {
-        type: "geojson",
-        data: data.result_geometry
-      });
-
-      this.map.addLayer({
-        id: "facilities-point",
-        type: "symbol",
-        source: "facilities",
-        layout: {
-          'icon-image': 'danger',
-          'icon-allow-overlap': true
-        }
-      });
-    })
+    fetch(request).then(response => response.json())
+      .then(data => {
+        this.map.addSource("facilities", {
+          type: "geojson",
+          data: data.result_geometry
+        });
+        this.map.addLayer({
+          id: "facilities-point",
+          type: "symbol",
+          source: "facilities",
+          layout: {
+            'icon-image': 'danger',
+            'icon-allow-overlap': true
+          }
+        });
+      })
       .catch(err => {
         console.log(err);
       });
-
-    fetch(request2).then(response => response.json()).then(data => {
-      console.log(data);
-      this.setState({
-        data: {
-          releaseMethodTotals: data
-        }
-      });
-    })
+    fetch(request2).then(response => response.json())
+      .then(data => {
+        console.log(data);
+        this.setState({
+          data: {
+            releaseMethodTotals: data
+          }
+        });
+      })
       .catch(err => {
         console.log(err);
       });
-
-    // Toggle off the input header
     this.setState({ showHeader: false });
   }
 
   // Executes each time user returns to input header
-  onClick() {
+  onHomeClick = () => {
     // Reset state
     this.setState({
       showHeader: true,
       center: [-97.2795, 38.0282],
       zoom: 4.2
     });
-
     // Change view back to original
     this.map.flyTo({
       center: this.state.center,
       zoom: this.state.zoom
     });
-
-    // Reconfigure map properties
     this.map.setCenter(this.state.center);
     this.map.setZoom(this.state.zoom);
-
-    // Clear input
-    this.geocoder.clear();
-
-    // Clear map layers and data source
+    // Remove data source
     this.map.removeLayer("facilities-point");
-    this.map.removeSource("facilities");
+    this.geocoder.clear();
   }
 
   render() {
@@ -192,18 +171,20 @@ class App extends React.Component {
             this.container = x;
           }}
         >
-          <a
-            href="https://github.com/nsavas/us-city-tri-visualizer"
-            target="_blank"
-            className="github-ribbon"
-          >
-            <img
-              src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149"
-              className="attachment-full size-full"
-              alt="Fork me on GitHub"
-              data-recalc-dims="1"
-            ></img>
-          </a>
+          {this.state.showHeader ?
+            <a
+              href="https://github.com/nsavas/us-city-tri-visualizer"
+              target="_blank"
+              className="github-ribbon"
+            >
+              <img
+                src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149"
+                className="attachment-full size-full"
+                alt="Fork me on GitHub"
+                data-recalc-dims="1"
+              ></img>
+            </a>
+            : null}
         </div>
         {this.state.showHeader ? (
           <div className="header">
@@ -236,16 +217,12 @@ class App extends React.Component {
               </div>
             </div>
           </div>
-        ) : (
-            <div className="result-view" style={{ position: "absolute", padding: "10px" }}>
-              <button onClick={this.onClick.bind(this)}>Go Back</button>
-              <div className="result-components" style={{ position: "absolute", left: "75vh" }}>
-                {this.state.data.releaseMethodTotals ?
-                  <ReleaseMethodBarChart data={this.state.data.releaseMethodTotals} />
-                  : null}
-              </div>
-            </div>
-          )}
+        ) : <Result
+            onHomeClick={this.onHomeClick}
+            city={this.state.city} state={this.state.state}
+            data={this.state.data}
+            geocoder={this.geocoder} map={this.map}
+          />}
       </div>
     );
   }
