@@ -212,7 +212,6 @@ class App extends React.Component {
                   To get started, enter a US city. This will grab the data for
                   the given city, map the toxic release facility locations, and load the chart components. Data includes
                   release method, amount of release, date of release, chemical names, and much more.
-                  more!
                 </h2>
               </div>
             </div>
