@@ -54,7 +54,7 @@ body {
 
 .header-bg {
   display: inline-block;
-  height: 350px;
+  height: 370px;
   width: 550px;
   background-color: rgba(255, 255, 255, 0.88);
   border-radius: 6px;
@@ -87,7 +87,7 @@ body {
   position: absolute;
   z-index: 1;
   width: 510px;
-  top: 290px;
+  top: 310px;
 } 
 
 .back-button {

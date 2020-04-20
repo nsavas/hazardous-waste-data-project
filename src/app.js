@@ -205,13 +205,13 @@ class App extends React.Component {
               <div className="header-description">
                 <h2>
                   Welcome to the <strong>US Chemical Release Visualizer</strong>
-                  , a tool for visualizing 30 years worth (1987-2017) of
+                  , a tool for exploring 30 years worth (1987-2017) of
                   chemical release data within any US city.
                   <br />
                   <br />
                   To get started, enter a US city. This will grab the data for
-                  the given city and begin the visualization. This data includes
-                  chemical name, amount of release, date of release, and much
+                  the given city, map the toxic release facility locations, and load the chart components. Data includes
+                  release method, amount of release, date of release, chemical names, and much more.
                   more!
                 </h2>
               </div>
