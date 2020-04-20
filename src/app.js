@@ -147,19 +147,21 @@ class App extends React.Component {
     // Reset state
     this.setState({
       showHeader: true,
-      center: [-97.2795, 38.0282],
-      zoom: 4.2
+      center: initialMapCenter,
+      zoom: initialMapZoom
     });
     // Change view back to original
     this.map.flyTo({
-      center: this.state.center,
-      zoom: this.state.zoom
+      center: initialMapCenter,
+      zoom: initialMapZoom
+
     });
-    this.map.setCenter(this.state.center);
-    this.map.setZoom(this.state.zoom);
+    this.map.setCenter(initialMapCenter);
+    this.map.setZoom(initialMapZoom);
+    this.geocoder.clear();
     // Remove data source
     this.map.removeLayer("facilities-point");
-    this.geocoder.clear();
+    this.map.removeSource("facilities");
   }
 
   render() {

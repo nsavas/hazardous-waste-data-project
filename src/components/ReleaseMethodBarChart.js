@@ -27,10 +27,11 @@ class ReleaseMethodBarChart extends Component {
         style={{ backgroundColor: "#ffffff", opacity: "0.8", padding: "5px", borderRadius: "10px" }}
       >
         <DiscreteColorLegend
+          style={{ position: 'absolute', left: '40%', top: '10px', paddingBottom: "50px" }}
           orientation="horizontal"
           items={[
             {
-              title: 'Total Release In Pounds (By)',
+              title: '  Total Release In Pounds',
               color: '#12939A'
             }
           ]}
