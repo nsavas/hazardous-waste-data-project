@@ -237,9 +237,13 @@ class App extends React.Component {
             </div>
           </div>
         ) : (
-            <div className="result-view">
+            <div className="result-view" style={{ position: "absolute", padding: "10px" }}>
               <button onClick={this.onClick.bind(this)}>Go Back</button>
-              {this.state.data.releaseMethodTotals ? <ReleaseMethodBarChart data={this.state.data.releaseMethodTotals} /> : null}
+              <div className="result-components" style={{ position: "absolute", left: "75vh" }}>
+                {this.state.data.releaseMethodTotals ?
+                  <ReleaseMethodBarChart data={this.state.data.releaseMethodTotals} />
+                  : null}
+              </div>
             </div>
           )}
       </div>

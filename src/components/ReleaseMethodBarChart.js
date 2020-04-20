@@ -19,15 +19,15 @@ class ReleaseMethodBarChart extends Component {
     const { fugitiveair, stackair, water, underground, landfill, landtreatment, surfaceimpoundment, otherdisposal } = this.props.data.result;
     console.log(this.props.data);
     return (
-      <div>
+      <div style={{ backgroundColor: "rgba(255, 255, 255, 0.7)" }}>
         <XYPlot
           className="release-method-bar-chart"
           xType="ordinal"
           width={700}
           height={300}
+          style={{ backgroundColor: "#ffffff", opacity: "0.8", padding: "5px", borderRadius: "10px" }}
         >
           <DiscreteColorLegend
-            style={{ position: 'absolute', left: '250px' }}
             orientation="horizontal"
             items={[
               {
