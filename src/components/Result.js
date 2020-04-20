@@ -1,23 +1,32 @@
 import React, { Component } from 'react';
-import Form from "react-bootstrap/Form";
-
-import ReleaseMethodBarChart from "./ReleaseMethodBarChart";
+import ResultPanel from "./ResultPanel";
+import Switch from '@material-ui/core/Switch';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class Result extends Component {
-  state = { showChartComponents: false }
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
   componentDidMount() {
     document
       .getElementById("result-geocoder")
       .appendChild(this.props.geocoder.onAdd(this.props.map));
   }
-  onShowChartComponentsToggle = () => {
-    this.setState(state => ({
-      showChartComponents: !state.showChartComponents
-    }));
-  }
   render() {
+    const headerStyle = {
+      margin: "10px",
+      fontFamily: "Titillium Web', sans-serif",
+      fontWeight: "lighter",
+      fontSize: "30px"
+    }
+    let resultPanel;
+    if (this.props.showResults) {
+      resultPanel = <ResultPanel onToggleResults={this.props.onToggleResults} data={this.props.data} showResults={this.props.showResults} />;
+    } else {
+      resultPanel = null;
+    }
     return (
       <div className="container-fluid" style={{ padding: "10px" }}>
         <div className="container">
@@ -25,27 +34,18 @@ class Result extends Component {
             <a href="javascript:;" onClick={this.props.onHomeClick} style={{ textDecoration: "none", outline: "none", color: "rgba(0, 0, 0, 0.5)" }}>
               <i className="fa fa-chevron-left fa-lg" aria-hidden="true"></i>
             </a>
+            <div id="result-geocoder" className="result-geocoder" style={{ paddingLeft: "15px", paddingRight: "30px" }}></div>
+            <span style={{ fontWeight: "600" }}>Current Location: &nbsp;</span>
             <form className="form-inline" >
-              <div id="result-geocoder" className="result-geocoder" style={{ paddingLeft: "15px", paddingRight: "30px" }}></div>
-              <span style={{ fontWeight: "600" }}>Current Location: &nbsp;</span>
               <span style={{ paddingRight: "30px" }}>{`${this.props.city}, ${this.props.state}`}</span>
               <span style={{ fontWeight: "600" }}>Show Chart Components: &nbsp;</span>
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="showChartComponentsSwitch" onClick={this.onShowChartComponentsToggle} />
-                <label for="showChartComponentsSwitch" className="custom-control-label"></label>
+              <div>
+                <Switch checked={this.props.showResults} onChange={this.props.onToggleResults} color="white" />
               </div>
             </form>
           </nav>
         </div>
-        {(this.props.data.releaseMethodTotals && this.state.showChartComponents) ?
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col">
-                <ReleaseMethodBarChart data={this.props.data.releaseMethodTotals} />
-              </div>
-            </div>
-          </div>
-          : null}
+        {resultPanel}
       </div>
     )
   }

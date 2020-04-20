@@ -11,10 +11,6 @@ import {
 } from 'react-vis/es/index';
 
 class ReleaseMethodBarChart extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { fugitiveair, stackair, water, underground, landfill, landtreatment, surfaceimpoundment, otherdisposal } = this.props.data.result;
     console.log(this.props.data);
@@ -24,7 +20,7 @@ class ReleaseMethodBarChart extends Component {
         xType="ordinal"
         width={700}
         height={300}
-        style={{ backgroundColor: "#ffffff", opacity: "0.8", padding: "5px", borderRadius: "10px" }}
+        style={{ backgroundColor: "#ffffff", opacity: "0.8", padding: "5px", borderRadius: "10px", border: "1px solid #000" }}
       >
         <DiscreteColorLegend
           style={{ position: 'absolute', left: '40%', top: '10px', paddingBottom: "50px" }}

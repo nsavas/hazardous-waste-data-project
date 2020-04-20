@@ -1,8 +1,10 @@
 import React from "react";
 import MapboxGl from "mapbox-gl/dist/mapbox-gl.js";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.min.js";
+import Fade from '@material-ui/core/Fade';
 
 import Result from "./components/Result";
+import Modal from 'react-modal';
 
 import "./App.css";
 
@@ -17,6 +19,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       showHeader: true,
+      showResults: false,
       center: initialMapCenter,
       zoom: initialMapZoom,
       data: {}
@@ -164,6 +167,10 @@ class App extends React.Component {
     this.map.removeSource("facilities");
   }
 
+  onToggleResults = () => {
+    this.setState({ showResults: !this.state.showResults });
+  }
+
   render() {
     return (
       <div className="App">
@@ -186,7 +193,7 @@ class App extends React.Component {
             ></img>
           </a>
         </div>
-        {this.state.showHeader ? (
+        {(this.state.showHeader && !this.state.data.releaseMethodTotals) ? (
           <div className="header">
             <div className="header-bg">
               <h1>US Chemical Release Visualizer</h1>
@@ -219,8 +226,9 @@ class App extends React.Component {
         ) : <Result
             onHomeClick={this.onHomeClick}
             city={this.state.city} state={this.state.state}
-            data={this.state.data}
+            data={this.state.data.releaseMethodTotals}
             geocoder={this.geocoder} map={this.map}
+            onToggleResults={this.onToggleResults} showResults={this.state.showResults}
           />}
       </div>
     );
