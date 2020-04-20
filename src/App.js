@@ -173,20 +173,18 @@ class App extends React.Component {
             this.container = x;
           }}
         >
-          {this.state.showHeader ?
-            <a
-              href="https://github.com/nsavas/us-city-tri-visualizer"
-              target="_blank"
-              className="github-ribbon"
-            >
-              <img
-                src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149"
-                className="attachment-full size-full"
-                alt="Fork me on GitHub"
-                data-recalc-dims="1"
-              ></img>
-            </a>
-            : null}
+          <a
+            href="https://github.com/nsavas/us-city-tri-visualizer"
+            target="_blank"
+            className="github-ribbon"
+          >
+            <img
+              src="https://github.blog/wp-content/uploads/2008/12/forkme_right_white_ffffff.png?resize=149%2C149"
+              className="attachment-full size-full"
+              alt="Fork me on GitHub"
+              data-recalc-dims="1"
+            ></img>
+          </a>
         </div>
         {this.state.showHeader ? (
           <div className="header">
